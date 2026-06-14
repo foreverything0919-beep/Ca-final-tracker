@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="CA Final"/>
+<meta name="theme-color" content="#0F172A"/>
+<title>CA Final War Room</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQ0EgRmluYWwgV2FyIFJvb20iLCJzaG9ydF9uYW1lIjoiQ0EgRmluYWwiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzBGMTcyQSIsInRoZW1lX2NvbG9yIjoiIzBGMTcyQSJ9"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUyIiBoZWlnaHQ9IjE1MiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTUyIiBoZWlnaHQ9IjE1MiIgcng9IjMyIiBmaWxsPSIjMEYxNzJBIi8+PHRleHQgeD0iNzYiIHk9IjEwNSIgZm9udC1zaXplPSI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InN5c3RlbS11aSI+8J+TiTwvdGV4dD48L3N2Zz4="/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0F172A;color:#E2E8F0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:700px;margin:0 auto;min-height:100vh;overflow-x:hidden}
+button{font-family:inherit;cursor:pointer}
+input{font-family:inherit}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+::-webkit-scrollbar{display:none}
+#header{background:#0F172A;border-bottom:1px solid #1E293B;padding-top:calc(14px + env(safe-area-inset-top,0));padding-bottom:12px;padding-left:18px;padding-right:18px;position:sticky;top:0;z-index:100}
+#content{padding:14px 14px 0}
+#nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:700px;background:#0F172A;border-top:1px solid #1E293B;padding:8px 16px calc(8px + env(safe-area-inset-bottom,0));display:flex;gap:4px;z-index:100}
+.nav-btn{flex:1;padding:8px 0;border:none;background:transparent;color:#64748B;border-radius:10px;font-weight:700;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:2px;transition:all .2s}
+.nav-btn.active{background:#4F8EF7;color:#fff}
+.nav-btn .ico{font-size:18px}
+.spacer{height:100px}
+.card{background:#1E293B;border-radius:16px;padding:14px;margin-bottom:14px;border:1px solid #334155}
+.slabel{font-size:10px;color:#64748B;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.pbar-wrap{height:7px;background:#0F172A;border-radius:6px;overflow:hidden;margin-top:4px}
+.pbar{height:100%;border-radius:6px;transition:width .5s ease}
+#week-scroll{display:flex;gap:4px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px}
+.wk-btn{padding:5px 10px;border-radius:8px;border:none;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;transition:all .2s}
+.tracker-table{width:100%;border-collapse:collapse;font-size:10px}
+.tracker-table th{padding:5px 2px;text-align:center;border-bottom:1px solid #334155;background:#0F172A;color:#94A3B8;font-weight:700;font-size:10px}
+.tracker-table th.slot-th{text-align:left;padding-left:5px;min-width:100px}
+.tracker-table td{padding:2px;text-align:center;border-bottom:1px solid #1E293B}
+.tracker-table tr:nth-child(even) td{background:#0F172A33}
+.tick-btn{width:28px;height:28px;border-radius:6px;border:1px solid #334155;background:#0F172A;color:#475569;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s;margin:auto;line-height:1}
+.tick-btn.done{background:#4FC8A0;border-color:#4FC8A0;color:#fff}
+.tick-btn.fail{border-color:#F7774F;color:#fff;font-size:11px}
+.tick-btn.empty{color:#334155;font-size:15px}
+.week-dots{display:flex;flex-wrap:wrap;gap:5px}
+.wdot{width:34px;height:34px;border-radius:50%;border:none;font-size:9px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2;cursor:pointer;transition:all .2s}
+.day-bars{display:flex;gap:3px;margin-top:10px}
+.day-bar-wrap{flex:1;text-align:center}
+.day-bar-outer{height:34px;background:#0F172A;border-radius:7px;overflow:hidden;display:flex;align-items:flex-end}
+.day-bar-inner{width:100%;border-radius:5px;transition:height .4s ease}
+.mock-input{width:100%;background:#0F172A;border:1px solid #334155;border-radius:8px;color:#E2E8F0;font-size:15px;font-weight:700;text-align:center;padding:7px 4px;outline:none}
+#reason-modal{display:none;position:fixed;inset:0;background:#000000cc;z-index:999;align-items:flex-end;justify-content:center}
+#reason-modal.open{display:flex}
+#reason-box{background:#1E293B;border-radius:24px 24px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0));width:100%;max-width:700px;border-top:1px solid #334155}
+.reason-btn{width:100%;padding:14px;border-radius:12px;border:1px solid #334155;background:#0F172A;color:#E2E8F0;font-size:14px;font-weight:600;text-align:left;margin-bottom:8px;display:flex;align-items:center;gap:10px;transition:all .2s}
+.reason-btn:active{background:#334155}
+.reason-btn .rbadge{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.r0{background:#F7774F22;color:#F7774F}
+.r1{background:#F7C14F22;color:#F7C14F}
+.r2{background:#C47AFF22;color:#C47AFF}
+.r3{background:#4F8EF722;color:#4F8EF7}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="header">
+    <div style="font-size:18px;font-weight:900;letter-spacing:-.5px">
+      <span style="background:linear-gradient(90deg,#4F8EF7,#C47AFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent">CA Final</span>
+      <span style="color:#64748B;font-weight:400;font-size:13px"> War Room</span>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:2px">
+      <span id="hdr-days" style="font-size:11px;font-weight:700"></span>
+      <span style="font-size:11px;color:#334155">·</span>
+      <span id="hdr-overall" style="font-size:11px;color:#64748B"></span>
+    </div>
+  </div>
+
+  <div id="content"></div>
+  <div class="spacer"></div>
+
+  <div id="reason-modal">
+    <div id="reason-box">
+      <div style="font-size:14px;font-weight:800;color:#E2E8F0;margin-bottom:4px">Why was this session missed?</div>
+      <div style="font-size:11px;color:#64748B;margin-bottom:16px">This helps track your patterns</div>
+      <button class="reason-btn" onclick="pickReason(0)">
+        <span class="rbadge r0">🚶</span>
+        <div><div style="font-weight:700">Going out for myself</div><div style="font-size:11px;color:#64748B">Personal outing, leisure, errands</div></div>
+      </button>
+      <button class="reason-btn" onclick="pickReason(1)">
+        <span class="rbadge r1">🤝</span>
+        <div><div style="font-weight:700">Going out for others</div><div style="font-size:11px;color:#64748B">Helping someone, social</div></div>
+      </button>
+      <button class="reason-btn" onclick="pickReason(2)">
+        <span class="rbadge r2">🤒</span>
+        <div><div style="font-weight:700">Health issue</div><div style="font-size:11px;color:#64748B">Feeling unwell, rest needed</div></div>
+      </button>
+      <button class="reason-btn" onclick="pickReason(3)">
+        <span class="rbadge r3">👨‍👩‍👧</span>
+        <div><div style="font-weight:700">Family commitment</div><div style="font-size:11px;color:#64748B">Family event, responsibility</div></div>
+      </button>
+      <button onclick="closeModal()" style="width:100%;padding:12px;border-radius:12px;border:none;background:#334155;color:#94A3B8;font-size:13px;font-weight:700;margin-top:4px">Cancel</button>
+    </div>
+  </div>
+
+  <div id="nav">
+    <button class="nav-btn active" data-view="dashboard" onclick="switchView('dashboard')"><span class="ico">🎯</span><span>Dashboard</span></button>
+    <button class="nav-btn" data-view="tracker" onclick="switchView('tracker')"><span class="ico">✓</span><span>Tracker</span></button>
+    <button class="nav-btn" data-view="reasons" onclick="switchView('reasons')"><span class="ico">📊</span><span>Why Missed</span></button>
+    <button class="nav-btn" data-view="mock" onclick="switchView('mock')"><span class="ico">📝</span><span>Mock Tests</span></button>
+  </div>
+</div>
+
+<script>
+const START=new Date("2026-06-15"),EXAM=new Date("2026-10-15"),N_WEEKS=17,DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const MORNING_SLOTS=["6:00–8:00 AM","8:00–10:00 AM","10:00–12:00 PM","12:00–1:30 PM"];
+const AFTERNOON_SLOTS=["2:00–3:30 PM","3:30–5:30 PM","5:30–7:30 PM","7:30–9:30 PM","9:30–11:00 PM"];
+const ALL_SLOTS=[...MORNING_SLOTS,...AFTERNOON_SLOTS];
+const N_MORNING=4,N_SLOTS=9;
+const MORNING_PLAN=["Audit","Audit","FR","FR","FR","FR","IDT","IDT","DT","DT","DT","DT","DT","AFM","AFM","AFM","AFM"];
+const SUBJECTS=[{name:"Audit",color:"#4F8EF7",bg:"#1a2744",icon:"📋"},{name:"FR",color:"#F7774F",bg:"#2a1a14",icon:"📊"},{name:"IDT",color:"#4FC8A0",bg:"#0f2a22",icon:"⚖️"},{name:"DT",color:"#C47AFF",bg:"#1e1035",icon:"💰"},{name:"AFM",color:"#F7C14F",bg:"#2a220a",icon:"📈"}];
+const REASONS=[{label:"Going out for myself",icon:"🚶",cls:"r0",color:"#F7774F"},{label:"Going out for others",icon:"🤝",cls:"r1",color:"#F7C14F"},{label:"Health issue",icon:"🤒",cls:"r2",color:"#C47AFF"},{label:"Family commitment",icon:"👨‍👩‍👧",cls:"r3",color:"#4F8EF7"}];
+
+function afternoonSubject(w){return w<10?"AFM":MORNING_PLAN[w];}
+function slotSubject(w,si){return si<N_MORNING?MORNING_PLAN[w]:afternoonSubject(w);}
+
+function initTicks(){const t={};for(let w=0;w<N_WEEKS;w++){t[w]={};for(let d=0;d<7;d++){t[w][d]={};for(let s=0;s<N_SLOTS;s++)t[w][d][s]=null;}}return t;}
+function initReasons(){const r={};for(let w=0;w<N_WEEKS;w++){r[w]={};for(let d=0;d<7;d++){r[w][d]={};for(let s=0;s<N_SLOTS;s++)r[w][d][s]=null;}}return r;}
+function loadState(){try{const s=localStorage.getItem("cafinal_v3");if(s)return JSON.parse(s);}catch(e){}return{ticks:initTicks(),reasons:initReasons(),mockScores:SUBJECTS.reduce((a,s)=>({...a,[s.name]:["","","","",""]}),{}),sundayRev:Array(N_WEEKS).fill(false),activeWeek:curWeekIdx(),view:"dashboard"};}
+function saveState(){try{localStorage.setItem("cafinal_v3",JSON.stringify(STATE));}catch(e){}}
+
+let STATE=loadState();
+
+function curWeekIdx(){return Math.max(0,Math.min(Math.floor((Date.now()-START.getTime())/(7*86400000)),N_WEEKS-1));}
+function daysLeft(){return Math.max(0,Math.ceil((EXAM-new Date())/86400000));}
+function weekDate(w,d){const dt=new Date(START);dt.setDate(dt.getDate()+w*7+d);return dt.toLocaleDateString("en-GB",{day:"2-digit",month:"short"});}
+function urgColor(){const d=daysLeft();return d>60?"#4FC8A0":d>30?"#F7C14F":"#F7774F";}
+function sv(name){return SUBJECTS.find(s=>s.name===name)||SUBJECTS[0];}
+
+function weekPct(w){let done=0,total=0;for(let d=0;d<7;d++)for(let s=0;s<N_SLOTS;s++){const v=STATE.ticks[w]?.[d]?.[s];if(v!==null&&v!==undefined){total++;if(v===true)done++;}}return total===0?0:Math.round(done/total*100);}
+function dayPct(w,d){let done=0,total=0;for(let s=0;s<N_SLOTS;s++){const v=STATE.ticks[w]?.[d]?.[s];if(v!==null&&v!==undefined){total++;if(v===true)done++;}}return total===0?0:Math.round(done/total*100);}
+function subjPct(name){let done=0,total=0;for(let w=0;w<N_WEEKS;w++){for(let d=0;d<7;d++)for(let s=0;s<N_SLOTS;s++){if(slotSubject(w,s)!==name)continue;const v=STATE.ticks[w]?.[d]?.[s];if(v!==null&&v!==undefined){total++;if(v===true)done++;}}}return total===0?0:Math.round(done/total*100);}
+function overallPct(){return Math.round(SUBJECTS.map(s=>subjPct(s.name)).reduce((a,b)=>a+b,0)/SUBJECTS.length);}
+function mockAvg(name){const vals=STATE.mockScores[name].map(Number).filter(v=>v>0);return vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;}
+function reasonCounts(){const counts=[0,0,0,0];for(let w=0;w<N_WEEKS;w++)for(let d=0;d<7;d++)for(let s=0;s<N_SLOTS;s++){const r=STATE.reasons[w]?.[d]?.[s];if(r!==null&&r!==undefined)counts[r]++;}return counts;}
+function subjReasonCounts(subjectName){const counts=[0,0,0,0];for(let w=0;w<N_WEEKS;w++){for(let d=0;d<7;d++)for(let s=0;s<N_SLOTS;s++){if(slotSubject(w,s)!==subjectName)continue;const r=STATE.reasons[w]?.[d]?.[s];if(r!==null&&r!==undefined)counts[r]++;}}}return counts;}
+
+function ring(pct,size,stroke,color,inner){const r=(size-stroke)/2,circ=2*Math.PI*r,offset=circ-(Math.min(pct,100)/100)*circ;return `<div style="position:relative;width:${size}px;height:${size}px;flex-shrink:0"><svg width="${size}" height="${size}" style="transform:rotate(-90deg);display:block"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#1E293B" stroke-width="${stroke}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${pct>0?color:"#1E293B"}" stroke-width="${stroke}" stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}" stroke-linecap="round" style="transition:stroke-dashoffset .5s ease"/></svg><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">${inner}</div></div>`;}
+
+let _pendingTick=null;
+function openReasonModal(w,d,s){_pendingTick={w,d,s};document.getElementById("reason-modal").classList.add("open");}
+function closeModal(){_pendingTick=null;document.getElementById("reason-modal").classList.remove("open");render();}
+function pickReason(r){if(_pendingTick){const{w,d,s}=_pendingTick;STATE.ticks[w][d][s]=false;STATE.reasons[w][d][s]=r;saveState();_pendingTick=null;}document.getElementById("reason-modal").classList.remove("open");render();}
+
+function doTick(w,d,s){const v=STATE.ticks[w]?.[d]?.[s];if(v===null||v===undefined){STATE.ticks[w][d][s]=true;STATE.reasons[w][d][s]=null;saveState();render();}else if(v===true){STATE.ticks[w][d][s]=false;STATE.reasons[w][d][s]=null;saveState();openReasonModal(w,d,s);}else{STATE.ticks[w][d][s]=null;STATE.reasons[w][d][s]=null;saveState();render();}}
+function doSundayRev(w){STATE.sundayRev[w]=!STATE.sundayRev[w];saveState();render();}
+function doMock(name,ti,val){STATE.mockScores[name][ti]=val;saveState();updateHeader();}
+function setWeek(w){STATE.activeWeek=w;saveState();render();}
+function switchView(v,week){STATE.view=v;if(week!==undefined)STATE.activeWeek=week;saveState();document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===v));render();window.scrollTo(0,0);}
+
+function failBg(w,d,s){const r=STATE.reasons[w]?.[d]?.[s];return r===null||r===undefined?"#F7774F33":REASONS[r].color+"44";}
+function failBorder(w,d,s){const r=STATE.reasons[w]?.[d]?.[s];return r===null||r===undefined?"#F7774F":REASONS[r].color;}
+
+function renderDashboard(){const d=daysLeft(),uc=urgColor(),ov=overallPct(),cw=curWeekIdx(),wPcts=Array.from({length:N_WEEKS},(_,w)=>weekPct(w)),sPcts=SUBJECTS.map(s=>subjPct(s.name)),rCounts=reasonCounts(),totalMissed=rCounts.reduce((a,b)=>a+b,0);return `<div style="background:linear-gradient(135deg,${uc}22,${uc}11);border:1px solid ${uc}55;border-radius:16px;padding:14px 16px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:10px;color:#64748B;text-transform:uppercase;letter-spacing:2px">CA Final · Oct 15 2026</div><div style="font-size:26px;font-weight:900;color:${uc};line-height:1.1">${d} days left</div></div><div style="text-align:right"><div style="font-size:10px;color:#64748B">Week ${cw+1} of ${N_WEEKS}</div><div style="font-size:22px;font-weight:900;color:#E2E8F0">${ov}%</div><div style="font-size:9px;color:#64748B">overall</div></div></div><div style="display:flex;justify-content:center;margin-bottom:20px">${ring(ov,150,13,"#C47AFF",`<div style="font-size:30px;font-weight:900;color:#E2E8F0">${ov}%</div><div style="font-size:9px;color:#64748B">Overall</div>`)}</div><div style="display:flex;justify-content:space-around;flex-wrap:wrap;gap:10px;margin-bottom:18px">${SUBJECTS.map((s,i)=>`<div style="display:flex;flex-direction:column;align-items:center;gap:5px">${ring(sPcts[i],76,7,s.color,`<div style="font-size:12px;font-weight:800;color:#E2E8F0">${sPcts[i]}%</div>`)}<div style="font-size:10px;font-weight:700;color:${s.color}">${s.icon} ${s.name}</div></div>`).join("")}</div><div class="card"><div class="slabel">Subject Breakdown</div>${SUBJECTS.map((s,i)=>`<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;margin-bottom:3px;font-size:12px"><span style="color:#CBD5E1;font-weight:600">${s.icon} ${s.name}</span><span style="color:${s.color};font-weight:700">${sPcts[i]}%</span></div><div class="pbar-wrap"><div class="pbar" style="width:${sPcts[i]}%;background:linear-gradient(90deg,${s.color}66,${s.color})"></div></div><div style="font-size:9px;color:${sPcts[i]>=80?"#4FC8A0":sPcts[i]>=50?"#F7C14F":"#F7774F"};text-align:right;margin-top:2px">${sPcts[i]>=80?"Strong ✓":sPcts[i]>=50?"Building ⚡":"Needs focus ⚠"}</div></div>`).join("")}</div><div class="card"><div class="slabel">17-Week Journey</div><div class="week-dots">${Array.from({length:N_WEEKS},(_,w)=>{const pct=wPcts[w],s=sv(MORNING_PLAN[w]),isCur=w===cw,filled=pct>=90,partial=pct>0&&pct<90,bg=filled?"#4FC8A0":partial?"#F7C14F":isCur?s.color:"#0F172A",fc=(filled||partial||isCur)?"#fff":"#475569";return `<button class="wdot" style="background:${bg};color:${fc};${isCur?`box-shadow:0 0 0 3px ${s.color}55`:""};border:none" onclick="switchView('tracker',${w})"><div>${w+1}</div><div style="font-size:6px">${MORNING_PLAN[w]}</div></button>`}).join("")}</div><div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">${[["#4FC8A0","≥90% ✓"],["#F7C14F","In progress"],["#4F8EF7","Current"],["#0F172A","Upcoming"]].map(([c,l])=>`<div style="display:flex;gap:5px;align-items:center"><div style="width:7px;height:7px;border-radius:50%;background:${c};border:1px solid #334155"></div><span style="font-size:9px;color:#64748B">${l}</span></div>`).join("")}</div></div>${totalMissed>0?`<div class="card" style="border-color:#F7774F33"><div class="slabel">Missed Sessions Snapshot</div><div style="display:flex;gap:8px;flex-wrap:wrap">${REASONS.map((r,i)=>`<div style="flex:1;min-width:65px;background:#0F172A;border-radius:10px;padding:10px 8px;text-align:center;border:1px solid ${r.color}33"><div style="font-size:16px">${r.icon}</div><div style="font-size:18px;font-weight:900;color:${r.color}">${rCounts[i]}</div><div style="font-size:9px;color:#64748B;margin-top:2px">${r.label.split(" ").slice(0,2).join(" ")}</div></div>`).join("")}</div><div style="font-size:10px;color:#334155;text-align:center;margin-top:10px">Total missed: ${totalMissed} · Tap "Why Missed" for breakdown</div></div>`:""}`;
+}
+
+function renderTracker(){const w=STATE.activeWeek,s=sv(MORNING_PLAN[w]),wP=weekPct(w),cw=curWeekIdx(),aftSubj=sv(afternoonSubject(w));return `<div id="week-scroll">${Array.from({length:N_WEEKS},(_,i)=>{const ws=sv(MORNING_PLAN[i]),active=i===w;return `<button class="wk-btn" style="background:${active?ws.color:"#1E293B"};color:${active?"#fff":"#64748B"}" onclick="setWeek(${i})">${i===cw?"▶":""}W${i+1}</button>`}).join("")}</div><div style="background:${s.bg};border:1px solid ${s.color}44;border-radius:14px;padding:13px 14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:10px;color:#64748B;text-transform:uppercase;letter-spacing:2px">Week ${w+1} · ${weekDate(w,0)}–${weekDate(w,6)}</div><div style="font-size:15px;font-weight:800;color:${s.color}">${s.icon} Morning: ${MORNING_PLAN[w]}</div><div style="font-size:12px;font-weight:700;color:${aftSubj.color}">${aftSubj.icon} Afternoon: ${afternoonSubject(w)}${w<10?" (AFM till W10)":""}</div></div>${ring(wP,65,6,s.color,`<div style="font-size:13px;font-weight:800;color:#E2E8F0">${wP}%</div>`)}</div><div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap"><div style="font-size:10px;color:#64748B;display:flex;gap:6px;align-items:center"><div style="width:10px;height:10px;border-radius:3px;background:#4FC8A0"></div>Done ✓</div>${REASONS.map((r,i)=>`<div style="font-size:10px;color:${r.color};display:flex;gap:5px;align-items:center"><div style="width:10px;height:10px;border-radius:3px;background:${r.color}44;border:1px solid ${r.color}"></div>${r.icon} ${r.label.split(" ").slice(0,2).join(" ")}</div>`).join("")}</div><div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:10px"><table class="tracker-table"><thead><tr><th class="slot-th">Slot</th>${DAYS.map((day,di)=>`<th><div>${day}</div><div style="font-size:8px;color:#64748B;font-weight:400">${weekDate(w,di)}</div></th>`).join("")}</tr></thead><tbody>${ALL_SLOTS.map((slot,si)=>{const isMorning=si<N_MORNING,slotSubj=isMorning?sv(MORNING_PLAN[w]):sv(afternoonSubject(w));return `<tr style="${!isMorning&&si===N_MORNING?"border-top:2px solid #334155":""}"><td style="text-align:left;padding-left:5px;color:#94A3B8;font-size:9px;border-left:3px solid ${slotSubj.color}44"><div style="color:${slotSubj.color};font-size:8px;font-weight:700">${slotSubj.name}</div><div>${slot}</div></td>${DAYS.map((_,di)=>{const v=STATE.ticks[w]?.[di]?.[si],reason=STATE.reasons[w]?.[di]?.[si],reasonIcon=(v===false&&reason!==null&&reason!==undefined)?REASONS[reason].icon:"",bg=v===true?"#4FC8A0":v===false?failBg(w,di,si):"#0F172A",border=v===true?"#4FC8A0":v===false?failBorder(w,di,si):"#334155",label=v===true?"✓":v===false?(reasonIcon||"✗"):"☐",cls=v===true?"done":v===false?"fail":"empty";return `<td><button class="tick-btn ${cls}" style="${v===false?`background:${bg};border-color:${border}`:""}" onclick="doTick(${w},${di},${si})">${label}</button></td>`}).join("")}</tr>`}).join("")}</tbody></table></div><div class="day-bars">${DAYS.map((_,di)=>{const pct=dayPct(w,di);return `<div class="day-bar-wrap"><div style="font-size:9px;color:#64748B;margin-bottom:3px">${DAYS[di]}</div><div class="day-bar-outer"><div class="day-bar-inner" style="height:${pct}%;background:${pct>=90?"#4FC8A0":s.color}"></div></div><div style="font-size:9px;color:${pct>=90?"#4FC8A0":"#64748B"};margin-top:2px;font-weight:700">${pct}%</div></div>`}).join("")}</div><div class="card" style="display:flex;align-items:center;justify-content:space-between;margin-top:12px"><div><div style="font-weight:700;color:#E2E8F0;font-size:13px">🔄 Sunday Full Revision</div><div style="font-size:10px;color:#64748B">Week ${w+1} — ${MORNING_PLAN[w]}</div></div><button class="tick-btn ${STATE.sundayRev[w]?"done":"empty"}" style="width:42px;height:42px;border-radius:10px;font-size:18px" onclick="doSundayRev(${w})">${STATE.sundayRev[w]?"✓":"☐"}</button></div><div style="font-size:10px;color:#334155;text-align:center;margin-top:8px">Tap ☐→✓→tap again for reason</div>`;}
+
+function renderReasons(){const rCounts=reasonCounts(),total=rCounts.reduce((a,b)=>a+b,0),weekReasonRows=Array.from({length:N_WEEKS},(_,w)=>{const wc=[0,0,0,0];for(let d=0;d<7;d++)for(let s=0;s<N_SLOTS;s++){const r=STATE.reasons[w]?.[d]?.[s];if(r!==null&&r!==undefined)wc[r]++;}return wc;});return `<div class="slabel">Why Sessions Were Missed</div>${total===0?`<div class="card" style="text-align:center;padding:30px"><div style="font-size:40px;margin-bottom:10px">🎯</div><div style="font-weight:700;color:#E2E8F0;font-size:16px">No missed sessions yet!</div><div style="font-size:12px;color:#64748B;margin-top:6px">Keep it up — track reasons when you mark sessions as missed</div></div>`:`<div class="card"><div class="slabel">Overall Breakdown · ${total} missed sessions</div><div style="display:flex;justify-content:space-around;flex-wrap:wrap;gap:12px;margin-bottom:16px">${REASONS.map((r,i)=>`<div style="display:flex;flex-direction:column;align-items:center;gap:6px">${ring(total>0?Math.round(rCounts[i]/total*100):0,80,7,r.color,`<div style="font-size:16px">${r.icon}</div><div style="font-size:12px;font-weight:800;color:#E2E8F0">${rCounts[i]}</div>`)}<div style="font-size:10px;font-weight:700;color:${r.color};text-align:center;max-width:70px">${r.label}</div><div style="font-size:10px;color:#64748B">${total>0?Math.round(rCounts[i]/total*100):0}%</div></div>`).join("")}</div>${REASONS.map((r,i)=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:3px;font-size:12px"><span style="color:#CBD5E1">${r.icon} ${r.label}</span><span style="color:${r.color};font-weight:700">${rCounts[i]} sessions</span></div><div class="pbar-wrap"><div class="pbar" style="width:${Math.round(rCounts[i]/Math.max(...rCounts,1)*100)}%;background:${r.color}"></div></div></div>`).join("")}</div><div class="card"><div class="slabel">By Subject</div>${SUBJECTS.map(s=>{const sc=subjReasonCounts(s.name),st=sc.reduce((a,b)=>a+b,0);return st===0?`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #334155;font-size:12px"><span style="color:#CBD5E1">${s.icon} ${s.name}</span><span style="color:#64748B">No missed sessions</span></div>`:`<div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #1E293B"><div style="font-size:12px;font-weight:700;color:${s.color};margin-bottom:6px">${s.icon} ${s.name} · ${st} missed</div><div style="display:flex;gap:6px">${REASONS.map((r,i)=>`<div style="flex:1;background:${r.color}11;border:1px solid ${r.color}33;border-radius:8px;padding:6px;text-align:center"><div style="font-size:13px">${r.icon}</div><div style="font-size:14px;font-weight:800;color:${r.color}">${sc[i]}</div></div>`).join("")}</div></div>`}).join("")}</div>`:`}`;
+}
+
+function renderMock(){return `<div class="slabel">Mock Test Scores (%)</div>${SUBJECTS.map(s=>{const avg=mockAvg(s.name);return `<div class="card" style="border-color:${avg>=60?s.color+"44":"#334155"}"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div style="font-weight:800;font-size:15px;color:${s.color}">${s.icon} ${s.name}</div><div style="background:${avg>=60?"#4FC8A022":avg>0?"#F7774F22":"#0F172A"};border:1px solid ${avg>=60?"#4FC8A055":avg>0?"#F7774F55":"#334155"};border-radius:8px;padding:3px 10px;color:${avg>=60?"#4FC8A0":avg>0?"#F7774F":"#475569"};font-weight:700;font-size:13px">${avg>0?"Avg: "+avg+"%":"No scores"}</div></div><div style="display:flex;gap:6px;flex-wrap:wrap">${STATE.mockScores[s.name].map((sc,ti)=>`<div style="flex:1;min-width:52px"><div style="font-size:9px;color:#64748B;margin-bottom:3px;text-align:center">Test ${ti+1}</div><input class="mock-input" type="number" min="0" max="100" placeholder="—" value="${sc}" oninput="doMock('${s.name}',${ti},this.value)" style="border-color:${Number(sc)>=60?s.color+"66":sc?"#F7774F66":"#334155"}"/><div style="font-size:8px;text-align:center;margin-top:2px;color:${Number(sc)>=60?"#4FC8A0":"#F7774F"}">${sc!==""?(Number(sc)>=60?"Pass ✓":"Fail ✗"):""}</div></div>`).join("")}</div><div class="pbar-wrap" style="margin-top:10px"><div class="pbar" style="width:${avg}%;background:${avg>=60?"#4FC8A0":"#F7774F"}"></div></div><div style="font-size:9px;color:#64748B;text-align:right;margin-top:3px">Pass: 60% · ${avg>=60?"✅ Above":avg>0?"❌ Below":"—"}</div></div>`}).join("")}`;}
+
+function updateHeader(){const d=daysLeft(),uc=urgColor(),ov=overallPct(),cw=curWeekIdx(),el1=document.getElementById("hdr-days"),el2=document.getElementById("hdr-overall");if(el1){el1.textContent=`⏱ ${d}d left`;el1.style.color=uc;}if(el2)el2.textContent=`W${cw+1}/${N_WEEKS} · ${ov}% done`;}
+function render(){updateHeader();const c=document.getElementById("content");if(!c)return;if(STATE.view==="dashboard")c.innerHTML=renderDashboard();else if(STATE.view==="tracker")c.innerHTML=renderTracker();else if(STATE.view==="reasons")c.innerHTML=renderReasons();else c.innerHTML=renderMock();}
+
+if("serviceWorker" in navigator){const sw=`const C="cafinal-v2";self.addEventListener("install",e=>{e.waitUntil(caches.open(C).then(c=>c.add("/")));self.skipWaiting()});self.addEventListener("activate",e=>{e.waitUntil(clients.claim())});self.addEventListener("fetch",e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:"text/javascript"})));}
+
+document.addEventListener("DOMContentLoaded",()=>{document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===STATE.view));render();});
+</script>
+</body>
+</html>
